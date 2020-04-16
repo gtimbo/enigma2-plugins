@@ -184,25 +184,27 @@ class CutTask(Task):
 		if failed or not 0 <= self.returncode <= 10:
 			self.returncode = 11
 
-		msg = (_("The movie \"%s\" is successfully cut"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("Bad arguments"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open input .ts file"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open input .cuts file"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open input .ap file"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open output .ts file"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open output .cuts file"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open output .ap file"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("Empty .ap file"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("No cuts specified"),
-			   _("Cutting failed for movie \"%s\"")+":\n"+_("Read/write error (disk full?)"),
-			   _("Cutting was aborted for movie \"%s\""))[self.returncode]
-		try:
-			self.session.open(MessageBox, msg % self.name, type=MessageBox.TYPE_ERROR if self.returncode else MessageBox.TYPE_INFO, timeout=10)
-		except RuntimeError:
-			# This is probably the modal error when called from CutListEditor,
-			# so just use a normal popup.
-			from Tools.Notifications import AddPopup
-			AddPopup(msg % self.name, type=MessageBox.TYPE_ERROR if self.returncode else MessageBox.TYPE_INFO, timeout=10, id=self.name)
+		if self.returncode > 0:
+			msg = (_("The movie \"%s\" is successfully cut"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("Bad arguments"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open input .ts file"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open input .cuts file"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open input .ap file"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open output .ts file"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open output .cuts file"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("Couldn't open output .ap file"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("Empty .ap file"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("No cuts specified"),
+				   _("Cutting failed for movie \"%s\"")+":\n"+_("Read/write error (disk full?)"),
+				   _("Cutting was aborted for movie \"%s\""))[self.returncode]
+
+			try:
+				self.session.open(MessageBox, msg % self.name, type=MessageBox.TYPE_ERROR if self.returncode else MessageBox.TYPE_INFO, timeout=10)
+			except RuntimeError:
+				# This is probably the modal error when called from CutListEditor,
+				# so just use a normal popup.
+				from Tools.Notifications import AddPopup
+				AddPopup(msg % self.name, type=MessageBox.TYPE_ERROR if self.returncode else MessageBox.TYPE_INFO, timeout=10, id=self.name)
 
 class AdvancedCutInput(Screen, ConfigListScreen):
 	def __init__(self, session, name, path, descr):
