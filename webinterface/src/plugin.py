@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 Version = '$Header$';
 
 from enigma import eConsoleAppContainer, eTPM
@@ -15,7 +16,8 @@ from Tools.IO import saveFile
 
 from twisted.internet import reactor, ssl
 from twisted.internet.error import CannotListenError
-from twisted.web import server, http, util, static, resource, version
+from twisted.web import server, http, util, static, resource
+from twisted import version
 
 from zope.interface import Interface, implements
 from socket import gethostname as socket_gethostname, has_ipv6
