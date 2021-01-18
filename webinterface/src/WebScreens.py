@@ -87,7 +87,11 @@ class AboutWebScreen(WebScreen):
 			self["ImageVersion"] = StaticText(about.getVersionString())
 		self["WebIfVersion"] = StaticText(config.plugins.Webinterface.version.value)
 		self["FpVersion"] = StaticText(str(getFPVersion()))
-		self["DeviceName"] = StaticText(hw.get_device_name())
+		try:
+			model = hw.get_device_model()
+		except:
+			model = hw.get_device_name()
+		self["DeviceName"] = StaticText(model)
 
 class VolumeWebScreen(WebScreen):
 	def __init__(self, session, request):
@@ -192,6 +196,7 @@ class MovieWebScreen(WebScreen):
 		self["MovieList"] = Movie(session, movielist, func=Movie.LIST)
 		self["MovieFileDel"] = Movie(session, movielist, func=Movie.DEL)
 		self["MovieFileMove"] = Movie(session, movielist, func=Movie.MOVE)
+		self["MovieListSubdir"] = Movie(session, None, func=Movie.DIRS)
 
 class MediaPlayerWebScreen(WebScreen):
 	def __init__(self, session, request):
